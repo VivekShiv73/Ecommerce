@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+
+  {% if category %}
+    {{ category.description|truncatewords:155 }}
+  {% else %}
+    Welcome to Farmogram.
+  {% endif %}
+{% endblock %}
+
+{% block title %}
+  {% if category %}
+    {{ category.name}} - Farmogram
+  {% else %}
+    See our collection - Farmogram
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+{% if category %}
+  <div>
+    <div class="row my_row_class">
+      <div class="mx-auto">
+        <p><a href="{% url 'shop:allProdCat' %}">Our Product Collection</a></p>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+<div class="mx-auto">
+  {% if category %}
+  <center>
+  <img src="{{category.image.url}}" alt="{{category.name}}" height="300px">
+  </center>
+</div>
+  <br>
+<div>
+  <h1 class="text-center my_title">{{category.name}}</h1>
+  <p class="text-justify">{{category.description}}</p>
+</div>
+  {% else %}
+<div>
+  <img src="{% static 'img/banner.png' %}" alt="Our products" height="450px" width="1350px">
+</div>
+<div>
+  <br><br>
+
+  <center><p class="text-justify">Welcome to our organic farm website! Here you can find out more about our products, our practices, and our philosophy. We are passionate about growing and raising food that is healthy, delicious, and sustainable.<br>
+
+  Our farm produces a variety of fruits and vegetables, such as apples, pears, carrots, potatoes, lettuce, and tomatoes. We use organic methods to ensure that our crops are free of pesticides, herbicides, and synthetic fertilizers. We also practice crop rotation, composting, and cover cropping to enrich the soil and prevent erosion.<br>
+
+  We also raise animals for meat and dairy products, such as chicken, mutton, beef, and cheese. Our animals are treated humanely and fed with organic feed. They have access to pasture, fresh water, and shelter. We do not use antibiotics, hormones, or growth promoters on our animals. We process our meat and dairy products on-site, following strict hygiene and quality standards.<br>
+
+  We believe that organic farming is not only good for the environment, but also for the people who consume our products. By choosing organic food, you are supporting local farmers, reducing your exposure to harmful chemicals, and enjoying the natural taste and nutrition of food. You are also contributing to a more sustainable and ethical food system.<br>
+
+  If you are interested in buying our products, you can visit our online shop or come to our farm stand. We also offer delivery service within a certain radius. You can also sign up for our newsletter to get updates on our seasonal offerings, recipes, and events.<br>
+
+  Thank you for visiting our website and supporting our organic farm. We hope to see you soon!</p>
+  </center>
+</div>
+{% endif %}
+<br>
+<h1 class="text-center my_title">Our product collections</h1>
+<div class="container">
+  <div class="row mx-auto">
+    {% for product in products.object_list %}
+      <div class="my_bottom_margin col-9 col-sm-4 col-md-4 col-lg-4">
+        <div class="card text-center" style="min-width:18rem">
+          <a href="{{product.get_url}}"><img class="card-img-top my_image" src="{{product.image.url}}" alt="{{product.name}}"></a>
+          <div class="card-body">
+            <h4>{{product.name}}</h4>
+            <p>{{product.price}}/{{product.unit}}</p>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+  <div class="mx-auto">
+    {% if products.paginator.num_pages > 1 %}
+    <hr>
+    <div class="text-center">
+      {% for pg in products.paginator.page_range %}
+        <a href="?page={{pg}}" class="btn btn-light btn-sm {% if products.number == pg %} active {% endif %}}">{{pg}}</a>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+  <br>
+</div>
+{% endblock %}
+
